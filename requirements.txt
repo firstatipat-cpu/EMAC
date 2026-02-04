@@ -13,3 +13,7 @@ watchdog
 requests
 mcp
 python-dotenv
+duckduckgo-search
+beautifulsoup4
+trafilatura
+html2text

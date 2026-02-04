@@ -1,4 +1,4 @@
-from src.agents import planner, coder, critic, analyst
+from src.agents import planner, coder, critic, analyst, researcher
 from src.memory.librarian import Librarian
 from src.core.config import load_config
 from src.tools.registry import ToolRegistry
@@ -12,10 +12,21 @@ def run_mission(objective: str):
     sandbox = get_sandbox()
     config = load_config()
     
+    # Tool Adapter for Researcher Agent
+    def research_adapter(query: str) -> str:
+        agent = researcher.Researcher()
+        res = agent.research(query)
+        output = f"## Research Summary\n{res.summary}\n\n## Code Snippets\n"
+        for i, snippet in enumerate(res.code_snippets):
+            output += f"Snippet {i+1}:\n```python\n{snippet}\n```\n"
+        output += f"\n## Sources\n{', '.join(res.sources)}"
+        return output
+
     registry = ToolRegistry()
     registry.register(web_search, "Search internet. Input: query")
     registry.register(run_shell, "Run shell command. Input: command")
     registry.register(list_files, "List files. Input: (ignored)")
+    registry.register(research_adapter, "Deep technical research. Input: query") # research_topic maps to this
     
     try:
         mcp = MCPConnector(registry)
