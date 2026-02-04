@@ -1,0 +1,33 @@
+version: '3'
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: emacs-searxng
+    ports: ["8081:8080"]
+    volumes: ["./settings.yml:/etc/searxng/settings.yml:ro"]
+    environment: ["SEARXNG_BASE_URL=http://localhost:8081/"]
+    restart: unless-stopped
+  langfuse-server:
+    image: ghcr.io/langfuse/langfuse:2
+    container_name: emacs-langfuse
+    depends_on: { db: { condition: service_healthy } }
+    ports: ["3000:3000"]
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=mysecret
+      - SALT=mysalt
+    restart: unless-stopped
+  db:
+    image: postgres:15
+    container_name: emacs-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment: ["POSTGRES_USER=postgres", "POSTGRES_PASSWORD=postgres", "POSTGRES_DB=postgres"]
+    volumes: ["langfuse-data:/var/lib/postgresql/data"]
+    restart: unless-stopped
+volumes:
+  langfuse-data:

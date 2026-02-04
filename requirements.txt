@@ -1,0 +1,15 @@
+ollama
+openai>=1.0.0
+instructor
+pydantic>=2.0.0
+tenacity
+chromadb
+langfuse
+docker
+streamlit
+streamlit-autorefresh
+pyyaml
+watchdog
+requests
+mcp
+python-dotenv

@@ -1,0 +1,13 @@
+{
+  "system_name": "EMACS_v5.0",
+  "version": "5.0.0",
+  "obsidian_vault_path": "./memory_logs", 
+  "max_attempts_per_step": 3,
+  "models": {
+    "planner": "gemma-abliterated",
+    "coder": "gemma-abliterated",
+    "critic": "gemma-abliterated",
+    "analyst": "gemma-abliterated"
+  },
+  "docker_image": "python:3.10-slim"
+}

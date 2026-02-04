@@ -1,0 +1,18 @@
+import qrcode
+
+def generate_qr_code(data_to_encode):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(data_to_encode)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save("qr_code.png")
+
+if __name__ == "__main__":
+    generate_qr_code("https://www.example.com")
+    print("QR code generated successfully!" )
